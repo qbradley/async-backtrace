@@ -77,7 +77,7 @@ impl Location {
     ///     }).await
     /// }
     /// ```
-    pub fn frame<F>(self, f: F) -> impl Future<Output = F::Output>
+    pub fn frame<F>(self, f: F) -> crate::Framed<F>
     where
         F: Future,
     {

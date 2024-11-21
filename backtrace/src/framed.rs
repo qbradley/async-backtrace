@@ -1,6 +1,7 @@
 use core::future::Future;
 use core::pin::Pin;
 use core::task::{Context, Poll};
+use futures::future::FusedFuture;
 use std::marker::PhantomPinned;
 
 use crate::frame::Frame;
@@ -47,5 +48,11 @@ where
         let frame = this.frame;
         let future = this.future;
         frame.in_scope(|| future.poll(cx))
+    }
+}
+
+impl<F: FusedFuture> FusedFuture for Framed<F> {
+    fn is_terminated(&self) -> bool {
+        self.future.is_terminated()
     }
 }
